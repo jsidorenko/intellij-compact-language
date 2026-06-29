@@ -3,6 +3,9 @@
 Syntax highlighting for the [Compact](https://docs.midnight.network/compact) smart
 contract language (Midnight) in IntelliJ IDEA and other IntelliJ-based IDEs.
 
+## Screenshot
+![img.png](img.png)
+
 ## Features
 
 - File type recognition for `.compact` files
