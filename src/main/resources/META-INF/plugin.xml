@@ -1,0 +1,47 @@
+<idea-plugin>
+    <id>com.midnight.compact</id>
+    <name>Compact</name>
+    <version>0.1.0</version>
+    <vendor>Compact Community</vendor>
+
+    <description><![CDATA[
+        Language support for <b>Compact</b>, the smart contract language for
+        <a href="https://midnight.network">Midnight</a>.
+        <br/>
+        Provides syntax highlighting for <code>.compact</code> files: keywords,
+        built-in types, string/number/boolean literals, line and block comments,
+        brace matching and line/block commenting. Colors are configurable under
+        <i>Settings | Editor | Color Scheme | Compact</i>.
+    ]]></description>
+
+    <!-- Compatible with all IntelliJ-based IDEs. -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileType
+            name="Compact File"
+            implementationClass="com.midnight.compact.CompactFileType"
+            fieldName="INSTANCE"
+            language="Compact"
+            extensions="compact"/>
+
+        <lang.parserDefinition
+            language="Compact"
+            implementationClass="com.midnight.compact.CompactParserDefinition"/>
+
+        <lang.syntaxHighlighterFactory
+            language="Compact"
+            implementationClass="com.midnight.compact.CompactSyntaxHighlighterFactory"/>
+
+        <lang.braceMatcher
+            language="Compact"
+            implementationClass="com.midnight.compact.CompactBraceMatcher"/>
+
+        <lang.commenter
+            language="Compact"
+            implementationClass="com.midnight.compact.CompactCommenter"/>
+
+        <colorSettingsPage
+            implementation="com.midnight.compact.CompactColorSettingsPage"/>
+    </extensions>
+</idea-plugin>

@@ -1,0 +1,38 @@
+pragma language_version >= 0.13;
+
+import CompactStandardLibrary;
+
+// Public, on-chain state.
+export ledger round: Counter;
+export ledger items: Map<Bytes<32>, Uint<64>>;
+
+// A private value supplied by the user's wallet at proof time.
+witness localSecret(): Bytes<32>;
+
+/* Runs exactly once, when the contract is deployed. */
+constructor() {
+  round.increment(0);
+}
+
+export circuit increment(value: Uint<16>): [] {
+  // `disclose` is required to move witness-derived data onto the ledger.
+  round.increment(disclose(value));
+}
+
+struct Account {
+  owner: Bytes<32>,
+  balance: Uint<64>,
+}
+
+enum Status {
+  Open,
+  Closed,
+}
+
+export circuit currentStatus(): Status {
+  if (round.read() > 100) {
+    return Status.Closed;
+  } else {
+    return Status.Open;
+  }
+}
