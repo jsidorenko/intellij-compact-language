@@ -92,7 +92,11 @@ brace/paren matching rather than a deep grammar. It resolves:
 - **circuit / constructor parameters**, scoped to that circuit's body block (so the same
   parameter name in two circuits resolves independently);
 - **`const` locals**, scoped to the enclosing block, use-after-declaration;
-- **struct-field access** (`expr.field`) to a matching `struct` field;
+- **struct-field access** (`expr.field`), *type-aware*: the receiver's struct type is
+  inferred from its declaration — parameters, annotated locals, and field chains like
+  `a.b.c` — and the field is resolved within that struct (so two structs sharing a field
+  name don't collide). When the type can't be determined, it falls back to any matching
+  struct field;
 - **top-level declarations** (circuit / witness / ledger / struct / enum / module) as a
   fallback.
 
