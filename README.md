@@ -13,6 +13,14 @@ contract language (Midnight) in IntelliJ IDEA and other IntelliJ-based IDEs.
   `enum`, `module`, `import`, `export`, `pragma`, `disclose`, `sealed`, `if`, `for`, …)
 - Highlighting of built-in types (`Boolean`, `Field`, `Uint`, `Bytes`, `Vector`,
   `Opaque`, `Counter`, `Cell`, `Map`, `Set`, `List`, `MerkleTree`, `Maybe`, `Either`, …)
+  and `CompactStandardLibrary` types (`Maybe`, `Either`, `Counter`, `Map`, `MerkleTree`,
+  `ContractAddress`, `ShieldedCoinInfo`, `QualifiedShieldedCoinInfo`, `ZswapCoinPublicKey`,
+  `UserAddress`, `MerkleTreeDigest`, `NativePoint`, `CoinInfo`, …), highlighted in their
+  own *Standard library type* color, distinct from primitives like `Field`/`Uint`
+- Highlighting of `CompactStandardLibrary` functions (`some`, `none`, `left`, `right`,
+  `persistentHash`, `sendShielded`, `merkleTreePathRoot`, `ownPublicKey`, the
+  `blockTime*`/`unshieldedBalance*` families, …) in a distinct *Standard library function*
+  color
 - String, number and boolean literals
 - Line (`//`) and block (`/* */`) comments
 - Brace / paren / bracket matching

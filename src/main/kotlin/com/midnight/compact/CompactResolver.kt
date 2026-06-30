@@ -250,7 +250,10 @@ object CompactResolver {
     private fun baseTypeAfterColon(sig: List<Leaf>, nameIndex: Int): String? {
         if (!isColon(sig.getOrNull(nameIndex + 1))) return null
         val t = sig.getOrNull(nameIndex + 2) ?: return null
-        return if (t.type == CompactTypes.IDENTIFIER || t.type == CompactTypes.TYPE) t.text else null
+        return if (t.type == CompactTypes.IDENTIFIER ||
+            t.type == CompactTypes.TYPE ||
+            t.type == CompactTypes.STDLIB_TYPE
+        ) t.text else null
     }
 
     /** Index of the open-brace of the innermost brace pair strictly enclosing [index], or null. */

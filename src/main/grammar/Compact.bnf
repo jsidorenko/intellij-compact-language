@@ -19,6 +19,8 @@
     IDENTIFIER="regexp:[a-zA-Z_][a-zA-Z0-9_]*"
     KEYWORD="keyword"
     TYPE="type"
+    STDLIB_TYPE="stdlibType"
+    BUILTIN_FUNCTION="builtinFn"
     BOOL_LITERAL="bool"
     STRING="string"
     NUMBER="number"
@@ -74,7 +76,7 @@ identifier_ref ::= IDENTIFIER
 
 // Catch-all: consume every remaining token kind so the parser never fails.
 private other_token ::=
-    KEYWORD | TYPE | BOOL_LITERAL | STRING | NUMBER
+    KEYWORD | TYPE | STDLIB_TYPE | BUILTIN_FUNCTION | BOOL_LITERAL | STRING | NUMBER
   | CIRCUIT | WITNESS | LEDGER | STRUCT | ENUM | MODULE | EXPORT | PURE | SEALED
   | LPAREN | RPAREN | LBRACE | RBRACE | LBRACKET | RBRACKET
   | SEMICOLON | COMMA | DOT | OPERATOR

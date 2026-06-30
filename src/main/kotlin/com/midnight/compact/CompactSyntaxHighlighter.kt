@@ -27,6 +27,8 @@ class CompactSyntaxHighlighter : SyntaxHighlighterBase() {
         CompactTypes.PURE,
         CompactTypes.SEALED -> KEYWORD_KEYS
         CompactTypes.TYPE -> TYPE_KEYS
+        CompactTypes.STDLIB_TYPE -> LIBRARY_TYPE_KEYS
+        CompactTypes.BUILTIN_FUNCTION -> LIBRARY_FUNCTION_KEYS
         CompactTypes.IDENTIFIER -> IDENTIFIER_KEYS
         CompactTypes.STRING -> STRING_KEYS
         CompactTypes.NUMBER -> NUMBER_KEYS
@@ -48,6 +50,10 @@ class CompactSyntaxHighlighter : SyntaxHighlighterBase() {
             createTextAttributesKey("COMPACT_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD)
         val TYPE: TextAttributesKey =
             createTextAttributesKey("COMPACT_TYPE", DefaultLanguageHighlighterColors.CLASS_NAME)
+        val LIBRARY_TYPE: TextAttributesKey =
+            createTextAttributesKey("COMPACT_LIBRARY_TYPE", DefaultLanguageHighlighterColors.CLASS_REFERENCE)
+        val LIBRARY_FUNCTION: TextAttributesKey =
+            createTextAttributesKey("COMPACT_LIBRARY_FUNCTION", DefaultLanguageHighlighterColors.STATIC_METHOD)
         val IDENTIFIER: TextAttributesKey =
             createTextAttributesKey("COMPACT_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER)
         val STRING: TextAttributesKey =
@@ -77,6 +83,8 @@ class CompactSyntaxHighlighter : SyntaxHighlighterBase() {
 
         private val KEYWORD_KEYS = arrayOf(KEYWORD)
         private val TYPE_KEYS = arrayOf(TYPE)
+        private val LIBRARY_TYPE_KEYS = arrayOf(LIBRARY_TYPE)
+        private val LIBRARY_FUNCTION_KEYS = arrayOf(LIBRARY_FUNCTION)
         private val IDENTIFIER_KEYS = arrayOf(IDENTIFIER)
         private val STRING_KEYS = arrayOf(STRING)
         private val NUMBER_KEYS = arrayOf(NUMBER)
