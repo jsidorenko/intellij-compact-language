@@ -27,6 +27,8 @@ class CompactColorSettingsPage : ColorSettingsPage {
         private val DESCRIPTORS = arrayOf(
             AttributesDescriptor("Keyword", CompactSyntaxHighlighter.KEYWORD),
             AttributesDescriptor("Built-in type", CompactSyntaxHighlighter.TYPE),
+            AttributesDescriptor("Standard library type", CompactSyntaxHighlighter.LIBRARY_TYPE),
+            AttributesDescriptor("Standard library function", CompactSyntaxHighlighter.LIBRARY_FUNCTION),
             AttributesDescriptor("Identifier", CompactSyntaxHighlighter.IDENTIFIER),
             AttributesDescriptor("String", CompactSyntaxHighlighter.STRING),
             AttributesDescriptor("Number", CompactSyntaxHighlighter.NUMBER),
@@ -67,6 +69,13 @@ class CompactColorSettingsPage : ColorSettingsPage {
             enum State { Open, Closed }
 
             witness localSecret(): Bytes<32>;
+
+            // Standard library types and functions
+            export circuit pay(to: ZswapCoinPublicKey, coin: QualifiedShieldedCoinInfo): ShieldedSendResult {
+              const recipient: Either<ZswapCoinPublicKey, ContractAddress> = left(to);
+              const digest: Bytes<32> = persistentHash(coin);
+              return sendShielded(coin, recipient, 1);
+            }
         """.trimIndent()
     }
 }
