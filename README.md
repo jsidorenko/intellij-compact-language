@@ -18,6 +18,9 @@ contract language (Midnight) in IntelliJ IDEA and other IntelliJ-based IDEs.
 - Brace / paren / bracket matching
 - Comment/uncomment actions (`Cmd/Ctrl + /` and `Cmd/Ctrl + Shift + /`)
 - Configurable colors under **Settings → Editor → Color Scheme → Compact**
+- **Go-to-definition** for top-level declarations (`circuit`, `witness`, `ledger`,
+  `struct`, `enum`, `module`): Ctrl/Cmd-click or Ctrl/Cmd-B jumps from a name usage to
+  its declaration in the same file
 
 ## Project layout
 
@@ -73,9 +76,25 @@ Build the plugin, then in your IDE:
 - **Target a different IDE version:** change `intellijIdeaCommunity("2024.2")` and
   `sinceBuild` in `build.gradle.kts`.
 
-## Notes
+## How go-to-definition works
 
-This plugin provides lexer-based syntax highlighting only — it deliberately does not
-include a full grammar/parser. It produces a flat PSI tree, which is enough for
-highlighting, brace matching and commenting. Go-to-definition, find-usages and
-inspections would require a full Grammar-Kit grammar and are out of scope here.
+`src/main/grammar/Compact.bnf` is a deliberately *tolerant* Grammar-Kit grammar: it
+recognizes top-level declaration headers (capturing each name as a navigable PSI
+element) and treats every other token as filler, so unknown constructs never produce
+parse errors. Identifier usages become reference elements; `CompactReferenceContributor`
+attaches a `CompactReference` that resolves a usage to the matching declaration in the
+same file. Regenerate the parser/PSI with `./gradlew generateParser` (the build runs it
+automatically before compilation).
+
+Resolution (in `CompactResolver`) is file-local and analyzes the lexer token stream with
+brace/paren matching rather than a deep grammar. It resolves:
+
+- **circuit / constructor parameters**, scoped to that circuit's body block (so the same
+  parameter name in two circuits resolves independently);
+- **`const` locals**, scoped to the enclosing block, use-after-declaration;
+- **struct-field access** (`expr.field`) to a matching `struct` field;
+- **top-level declarations** (circuit / witness / ledger / struct / enum / module) as a
+  fallback.
+
+Cross-file imports are still out of scope. Unresolved identifiers (library symbols,
+types) use *soft* references, so they don't navigate but aren't flagged as errors.

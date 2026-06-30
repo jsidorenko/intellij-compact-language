@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.midnight.compact"
-version = "0.1.0"
+version = "0.2.0"
 
 repositories {
     mavenCentral()
@@ -50,19 +50,29 @@ sourceSets {
 }
 
 tasks {
-    // The grammarkit plugin pre-registers `generateLexer`. `targetRootOutputDir` is the
-    // source root; `packageName` determines the package sub-directory the lexer lands in.
+    // The grammarkit plugin pre-registers `generateLexer` / `generateParser`.
+    // `targetRootOutputDir` is the source root; the package sub-directory is derived
+    // from `packageName` (lexer) or the paths below (parser). Both write into
+    // src/main/gen, so purging is disabled to avoid one task wiping the other's output.
     generateLexer {
         sourceFile.set(file("src/main/jflex/com/midnight/compact/Compact.flex"))
         targetRootOutputDir.set(file("src/main/gen"))
         packageName.set("com.midnight.compact")
-        purgeOldFiles.set(true)
+        purgeOldFiles.set(false)
+    }
+
+    generateParser {
+        sourceFile.set(file("src/main/grammar/Compact.bnf"))
+        targetRootOutputDir.set(file("src/main/gen"))
+        pathToParser.set("com/midnight/compact/parser/CompactParser.java")
+        pathToPsiRoot.set("com/midnight/compact/psi")
+        purgeOldFiles.set(false)
     }
 
     compileKotlin {
-        dependsOn(generateLexer)
+        dependsOn(generateLexer, generateParser)
     }
     compileJava {
-        dependsOn(generateLexer)
+        dependsOn(generateLexer, generateParser)
     }
 }

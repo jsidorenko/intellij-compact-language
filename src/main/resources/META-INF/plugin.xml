@@ -43,5 +43,14 @@
 
         <colorSettingsPage
             implementation="com.midnight.compact.CompactColorSettingsPage"/>
+
+        <!-- Go-to-definition. The handler provides Ctrl/Cmd-click navigation directly;
+             the reference contributor adds underline-on-hover and completion variants. -->
+        <gotoDeclarationHandler
+            implementation="com.midnight.compact.CompactGotoDeclarationHandler"/>
+
+        <psi.referenceContributor
+            language="Compact"
+            implementation="com.midnight.compact.CompactReferenceContributor"/>
     </extensions>
 </idea-plugin>

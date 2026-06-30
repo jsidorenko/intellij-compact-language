@@ -8,14 +8,24 @@ import com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributes
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
+import com.midnight.compact.psi.CompactTypes
 
 class CompactSyntaxHighlighter : SyntaxHighlighterBase() {
 
     override fun getHighlightingLexer(): Lexer = CompactLexerAdapter()
 
     override fun getTokenHighlights(tokenType: IElementType): Array<TextAttributesKey> = when (tokenType) {
-        CompactTypes.KEYWORD -> KEYWORD_KEYS
-        CompactTypes.BOOL_LITERAL -> KEYWORD_KEYS
+        CompactTypes.KEYWORD,
+        CompactTypes.BOOL_LITERAL,
+        CompactTypes.CIRCUIT,
+        CompactTypes.WITNESS,
+        CompactTypes.LEDGER,
+        CompactTypes.STRUCT,
+        CompactTypes.ENUM,
+        CompactTypes.MODULE,
+        CompactTypes.EXPORT,
+        CompactTypes.PURE,
+        CompactTypes.SEALED -> KEYWORD_KEYS
         CompactTypes.TYPE -> TYPE_KEYS
         CompactTypes.IDENTIFIER -> IDENTIFIER_KEYS
         CompactTypes.STRING -> STRING_KEYS

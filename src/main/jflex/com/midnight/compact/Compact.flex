@@ -3,6 +3,7 @@ package com.midnight.compact;
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.TokenType;
+import com.midnight.compact.psi.CompactTypes;
 
 %%
 
@@ -43,22 +44,25 @@ STRING        = \" ( [^\\\"\r\n] | \\[^\r\n] )* \"?
   "true"               { return CompactTypes.BOOL_LITERAL; }
   "false"              { return CompactTypes.BOOL_LITERAL; }
 
+  // Structural keywords — distinct tokens so the parser can recognize declarations.
+  "circuit"            { return CompactTypes.CIRCUIT; }
+  "witness"            { return CompactTypes.WITNESS; }
+  "ledger"             { return CompactTypes.LEDGER; }
+  "struct"             { return CompactTypes.STRUCT; }
+  "enum"               { return CompactTypes.ENUM; }
+  "module"             { return CompactTypes.MODULE; }
+  "export"             { return CompactTypes.EXPORT; }
+  "pure"               { return CompactTypes.PURE; }
+  "sealed"             { return CompactTypes.SEALED; }
+
+  // Remaining keywords share a single token; they only matter for highlighting.
   "pragma"             { return CompactTypes.KEYWORD; }
   "language_version"   { return CompactTypes.KEYWORD; }
   "import"             { return CompactTypes.KEYWORD; }
-  "export"             { return CompactTypes.KEYWORD; }
-  "module"             { return CompactTypes.KEYWORD; }
   "include"            { return CompactTypes.KEYWORD; }
   "contract"           { return CompactTypes.KEYWORD; }
-  "circuit"            { return CompactTypes.KEYWORD; }
-  "witness"            { return CompactTypes.KEYWORD; }
-  "ledger"             { return CompactTypes.KEYWORD; }
   "constructor"        { return CompactTypes.KEYWORD; }
-  "struct"             { return CompactTypes.KEYWORD; }
-  "enum"               { return CompactTypes.KEYWORD; }
-  "sealed"             { return CompactTypes.KEYWORD; }
-  "pure"               { return CompactTypes.KEYWORD; }
-  "const"             { return CompactTypes.KEYWORD; }
+  "const"              { return CompactTypes.KEYWORD; }
   "return"             { return CompactTypes.KEYWORD; }
   "if"                 { return CompactTypes.KEYWORD; }
   "else"               { return CompactTypes.KEYWORD; }
