@@ -1,0 +1,20 @@
+pragma language_version >= 0.13;
+
+struct Account {
+  owner: Bytes<32>,
+  balance: Uint<64>,
+}
+
+export ledger accounts: Map<Bytes<32>, Account>;
+
+export circuit transfer(from: Bytes<32>, amount: Uint<64>): [] {
+  const fee = amount;          // `amount` -> param of transfer
+  const total = amount;        // `amount` -> param of transfer
+  const sender = lookup(from);  // `from` -> param of transfer
+  sender.balance;              // `balance` -> Account field
+  return total;                // `total` -> local const total
+}
+
+export circuit other(amount: Field): Field {
+  return amount;               // `amount` -> param of `other`, NOT transfer
+}

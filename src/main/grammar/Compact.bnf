@@ -1,0 +1,80 @@
+{
+  parserClass="com.midnight.compact.parser.CompactParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Compact"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.midnight.compact.psi"
+  psiImplPackage="com.midnight.compact.psi.impl"
+
+  elementTypeHolderClass="com.midnight.compact.psi.CompactTypes"
+  elementTypeClass="com.midnight.compact.psi.CompactElementType"
+  tokenTypeClass="com.midnight.compact.psi.CompactTokenType"
+
+  // The real lexer is the external JFlex lexer (Compact.flex). These token declarations
+  // exist only so Grammar-Kit emits matching constants in CompactTypes; the right-hand
+  // sides are informational and not used at runtime.
+  tokens=[
+    IDENTIFIER="regexp:[a-zA-Z_][a-zA-Z0-9_]*"
+    KEYWORD="keyword"
+    TYPE="type"
+    BOOL_LITERAL="bool"
+    STRING="string"
+    NUMBER="number"
+    LINE_COMMENT="//comment"
+    BLOCK_COMMENT="/*comment*/"
+
+    // Structural keywords the grammar needs to recognize individually.
+    CIRCUIT="circuit"
+    WITNESS="witness"
+    LEDGER="ledger"
+    STRUCT="struct"
+    ENUM="enum"
+    MODULE="module"
+    EXPORT="export"
+    PURE="pure"
+    SEALED="sealed"
+
+    LPAREN="("
+    RPAREN=")"
+    LBRACE="{"
+    RBRACE="}"
+    LBRACKET="["
+    RBRACKET="]"
+    SEMICOLON=";"
+    COMMA=","
+    DOT="."
+    OPERATOR="op"
+  ]
+}
+
+// A Compact file is just a stream of items. The grammar is intentionally tolerant: every
+// token is consumed by some alternative, so partial/unknown constructs never produce
+// parse errors. Only top-level declaration names get dedicated PSI elements.
+compactFile ::= item *
+
+private item ::= declaration | identifier_ref | other_token
+
+// e.g. `export ledger round`, `pure circuit foo`, `struct Account`, `enum Status`, `module M`
+declaration ::= modifier * decl_keyword identifier_def
+
+private modifier ::= EXPORT | PURE | SEALED
+
+private decl_keyword ::= CIRCUIT | WITNESS | LEDGER | STRUCT | ENUM | MODULE
+
+// The declared name — a navigable, renameable named element (go-to-definition target).
+identifier_def ::= IDENTIFIER {
+  mixin="com.midnight.compact.psi.impl.CompactNamedElementImpl"
+  implements="com.midnight.compact.psi.CompactNamedElement"
+}
+
+// Any other identifier is treated as a usage; a reference contributor resolves it.
+identifier_ref ::= IDENTIFIER
+
+// Catch-all: consume every remaining token kind so the parser never fails.
+private other_token ::=
+    KEYWORD | TYPE | BOOL_LITERAL | STRING | NUMBER
+  | CIRCUIT | WITNESS | LEDGER | STRUCT | ENUM | MODULE | EXPORT | PURE | SEALED
+  | LPAREN | RPAREN | LBRACE | RBRACE | LBRACKET | RBRACKET
+  | SEMICOLON | COMMA | DOT | OPERATOR
