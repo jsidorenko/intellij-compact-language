@@ -5,14 +5,33 @@ struct Account {
   balance: Uint<64>,
 }
 
+struct Token {
+  owner: Bytes<32>,
+  supply: Uint<64>,
+}
+
+struct Wallet {
+  primary: Account,
+  label: Opaque<"string">,
+}
+
 export ledger accounts: Map<Bytes<32>, Account>;
 
 export circuit transfer(from: Bytes<32>, amount: Uint<64>): [] {
   const fee = amount;          // `amount` -> param of transfer
   const total = amount;        // `amount` -> param of transfer
   const sender = lookup(from);  // `from` -> param of transfer
-  sender.balance;              // `balance` -> Account field
   return total;                // `total` -> local const total
+}
+
+// `acc` is typed Account, so `acc.owner` must resolve to Account.owner (NOT Token.owner).
+export circuit ownerOf(acc: Account): Bytes<32> {
+  return acc.owner;
+}
+
+// Chained access: `w.primary` is an Account, so `.balance` resolves to Account.balance.
+export circuit balanceOf(w: Wallet): Uint<64> {
+  return w.primary.balance;
 }
 
 export circuit other(amount: Field): Field {
